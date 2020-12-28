@@ -6,9 +6,13 @@ const dotenv = require('dotenv');
 dotenv.config({ path: '../../config/config' });
 const jwt = require('jsonwebtoken');
 const jwtSecret = process.env.jwtSecret;
+const auth = require('../../middleware/auth.middleware');
 
 const User = require('../../models/user.model');
 
+// @route        post api/auth
+// @description  auth user
+// @access       public
 router.post('/', (req, res) => {
     const { email, password } = req.body;
 
@@ -45,6 +49,15 @@ router.post('/', (req, res) => {
                     );
                 })
         })
+});
+
+// @route        get api/auth/user
+// @description  get the user data
+// @access       private
+router.get('/user', auth, (req, res) => {
+    User.findById(req.user.id)
+        .select('-password')
+        .then(user => res.json(user))
 })
 
 module.exports = router;

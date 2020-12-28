@@ -10,6 +10,9 @@ const jwtSecret = process.env.jwtSecret;
 // user model
 const User = require('../../models/user.model');
 
+// @route        post api/users
+// @description  register the user data
+// @access       public
 router.post('/', (req, res) => {
     const { name, email, password } = req.body;
     if (!name || !email || !password)
@@ -34,7 +37,7 @@ router.post('/', (req, res) => {
                     newUser.save()
                         .then(user => {
                             jwt.sign(
-                                {id: user.id},
+                                { id: user.id },
                                 jwtSecret,
                                 { expiresIn: 3600 },
                                 (err, token) => {
@@ -53,6 +56,6 @@ router.post('/', (req, res) => {
                 })
             })
         })
-})
+});
 
 module.exports = router;
